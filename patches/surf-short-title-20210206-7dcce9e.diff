@@ -1,0 +1,115 @@
+From d5437333d64ff5eb7aaab19e4d42b11d6773a7b0 Mon Sep 17 00:00:00 2001
+From: Harsh Parekh <harsh_parekh@outlook.com>
+Date: Sat, 6 Feb 2021 08:33:49 -0500
+Subject: [PATCH] Hide status from title.
+
+You can pass -E 1 to show the extended title.
+---
+ config.def.h |  2 ++
+ surf.1       |  7 +++++++
+ surf.c       | 31 ++++++++++++++++++++++++-------
+ 3 files changed, 33 insertions(+), 7 deletions(-)
+
+diff --git a/config.def.h b/config.def.h
+index be168ab..2783e4d 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -1,5 +1,6 @@
+ /* modifier 0 means no modifier */
+ static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
++static int extendedtitle    = 0;  /* 0 to not append surf's toggle and page status to title. */
+ static char *fulluseragent  = ""; /* Or override the whole user agent string */
+ static char *scriptfile     = "~/.surf/script.js";
+ static char *styledir       = "~/.surf/styles/";
+@@ -176,6 +177,7 @@ static Key keys[] = {
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_a,      togglecookiepolicy, { 0 } },
+ 	{ 0,                     GDK_KEY_F11,    togglefullscreen, { 0 } },
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_o,      toggleinspector, { 0 } },
++	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_e,      toggletitle,        { 0 } },
+ 
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_c,      toggle,     { .i = CaretBrowsing } },
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_f,      toggle,     { .i = FrameFlattening } },
+diff --git a/surf.1 b/surf.1
+index 45c31bb..0e15c61 100644
+--- a/surf.1
++++ b/surf.1
+@@ -55,6 +55,13 @@ Enable the disk cache.
+ Reparents to window specified by
+ .IR xid .
+ .TP
++.B \-E [1|0]
++Show or hide
++.I indicators of operation
++and
++.I indicators of web page
++in the title.
++.TP
+ .B \-f
+ Start surf in windowed mode (not fullscreen).
+ .TP
+diff --git a/surf.c b/surf.c
+index ac832ff..bca0b91 100644
+--- a/surf.c
++++ b/surf.c
+@@ -234,6 +234,7 @@ static void toggle(Client *c, const Arg *a);
+ static void togglefullscreen(Client *c, const Arg *a);
+ static void togglecookiepolicy(Client *c, const Arg *a);
+ static void toggleinspector(Client *c, const Arg *a);
++static void toggletitle(Client *c, const Arg *a);
+ static void find(Client *c, const Arg *a);
+ 
+ /* Buttons */
+@@ -649,13 +650,19 @@ updatetitle(Client *c)
+ 		gettogglestats(c);
+ 		getpagestats(c);
+ 
+-		if (c->progress != 100)
+-			title = g_strdup_printf("[%i%%] %s:%s | %s",
+-			        c->progress, togglestats, pagestats, name);
+-		else
+-			title = g_strdup_printf("%s:%s | %s",
+-			        togglestats, pagestats, name);
+-
++		if (c->progress != 100) {
++            if (!extendedtitle)
++                title = g_strdup_printf("[%i%%] %s", c->progress, name);
++            else
++			    title = g_strdup_printf("[%i%%] %s:%s | %s",
++						c->progress, togglestats, pagestats, name);
++        } else {
++            if (!extendedtitle)
++                title = g_strdup_printf("%s", name);
++            else
++			    title = g_strdup_printf("%s:%s | %s",
++						togglestats, pagestats, name);
++        }
+ 		gtk_window_set_title(GTK_WINDOW(c->win), title);
+ 		g_free(title);
+ 	} else {
+@@ -1953,6 +1960,13 @@ toggleinspector(Client *c, const Arg *a)
+ 		webkit_web_inspector_show(c->inspector);
+ }
+ 
++void
++toggletitle(Client *c, const Arg *a)
++{
++	extendedtitle = !extendedtitle;
++	updatetitle(c);
++}
++
+ void
+ find(Client *c, const Arg *a)
+ {
+@@ -2042,6 +2056,9 @@ main(int argc, char *argv[])
+ 	case 'e':
+ 		embed = strtol(EARGF(usage()), NULL, 0);
+ 		break;
++    case 'E':
++        extendedtitle = strtol(EARGF(usage()), NULL, 0);
++        break;
+ 	case 'f':
+ 		defconfig[RunInFullscreen].val.i = 0;
+ 		defconfig[RunInFullscreen].prio = 2;
+-- 
+2.30.0
+

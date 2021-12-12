@@ -1,0 +1,69 @@
+From 47c1ddc06052c5a86aaab8bc4a5a3fe59995b30b Mon Sep 17 00:00:00 2001
+From: Lars Niesen <lars.niesen@gmx.de>
+Date: Thu, 9 Dec 2021 14:42:13 +0100
+Subject: [PATCH] added zoommtg scheme handler
+
+---
+ surf.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/surf.c b/surf.c
+index af0fa74..338045c 100644
+--- a/surf.c
++++ b/surf.c
+@@ -217,6 +217,8 @@ static void webprocessterminated(WebKitWebView *v,
+ static void closeview(WebKitWebView *v, Client *c);
+ static void destroywin(GtkWidget* w, Client *c);
+ 
++static void handle_zoommtg(WebKitURISchemeRequest *request);
++
+ /* Hotkeys */
+ static void pasteuri(GtkClipboard *clipboard, const char *text, gpointer d);
+ static void reload(Client *c, const Arg *a);
+@@ -562,6 +564,7 @@ loaduri(Client *c, const Arg *a)
+ 	if (g_strcmp0(uri, "") == 0)
+ 		return;
+ 
++
+ 	if (g_str_has_prefix(uri, "http://")  ||
+ 	    g_str_has_prefix(uri, "https://") ||
+ 	    g_str_has_prefix(uri, "file://")  ||
+@@ -1182,6 +1185,9 @@ newview(Client *c, WebKitWebView *rv)
+ 		g_signal_connect(G_OBJECT(context), "initialize-web-extensions",
+ 		                 G_CALLBACK(initwebextensions), c);
+ 
++		webkit_web_context_register_uri_scheme(context, "zoommtg",
++    					(WebKitURISchemeRequestCallback)handle_zoommtg, NULL, NULL);
++
+ 		v = g_object_new(WEBKIT_TYPE_WEB_VIEW,
+ 		    "settings", settings,
+ 		    "user-content-manager", contentmanager,
+@@ -1776,6 +1782,25 @@ destroywin(GtkWidget* w, Client *c)
+ 		gtk_main_quit();
+ }
+ 
++void 
++handle_zoommtg(WebKitURISchemeRequest *request)
++{
++	char* uri = webkit_uri_scheme_request_get_uri (request);
++	Arg a = (Arg)PLUMB(uri);
++	printf("handleplumb: %s",(char*)a.v);
++	if (fork() == 0) {
++		if (dpy)
++			close(ConnectionNumber(dpy));
++		close(spair[0]);
++		close(spair[1]);
++		setsid();
++		execvp(((char **)a.v)[0], (char **)a.v);
++		fprintf(stderr, "%s: execvp %s", argv0, ((char **)a.v)[0]);
++		perror(" failed");
++		exit(1);
++	}
++}
++
+ void
+ pasteuri(GtkClipboard *clipboard, const char *text, gpointer d)
+ {
+-- 
+2.34.1
+

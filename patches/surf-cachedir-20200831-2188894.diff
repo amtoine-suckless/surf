@@ -1,0 +1,36 @@
+From 2188894f8e6b1d2232a77b06d07776bdd6bdb4f3 Mon Sep 17 00:00:00 2001
+From: David Carey <david@davidpcarey.com>
+Date: Mon, 31 Aug 2020 14:03:17 -0500
+Subject: [PATCH] Allow custom cache directory via CLI argument.
+
+---
+ surf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/surf.c b/surf.c
+index 2b54e3c..8436ded 100644
+--- a/surf.c
++++ b/surf.c
+@@ -306,7 +306,8 @@ usage(void)
+ {
+ 	die("usage: surf [-bBdDfFgGiIkKmMnNpPsStTvwxX]\n"
+ 	    "[-a cookiepolicies ] [-c cookiefile] [-C stylefile] [-e xid]\n"
+-	    "[-r scriptfile] [-u useragent] [-z zoomlevel] [uri]\n");
++	    "[-h cachedir] [-r scriptfile] [-u useragent]\n"
++	    "[-z zoomlevel] [uri]\n");
+ }
+ 
+ void
+@@ -2026,6 +2027,9 @@ main(int argc, char *argv[])
+ 		defconfig[Geolocation].val.i = 1;
+ 		defconfig[Geolocation].prio = 2;
+ 		break;
++	case 'h':
++		cachedir = EARGF(usage());
++		break;
+ 	case 'i':
+ 		defconfig[LoadImages].val.i = 0;
+ 		defconfig[LoadImages].prio = 2;
+-- 
+2.28.0
+

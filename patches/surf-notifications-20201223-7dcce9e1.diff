@@ -1,0 +1,84 @@
+diff --git a/config.def.h b/config.def.h
+index be168ab..3e9f40e 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -41,6 +41,7 @@ static Parameter defconfig[ParameterLast] = {
+ 	[KioskMode]           =       { { .i = 0 },     },
+ 	[LoadImages]          =       { { .i = 1 },     },
+ 	[MediaManualPlay]     =       { { .i = 1 },     },
++	[Notifications]       =       { { .i = 0 },     },
+ 	[Plugins]             =       { { .i = 1 },     },
+ 	[PreferredLanguages]  =       { { .v = (char *[]){ NULL } }, },
+ 	[RunInFullscreen]     =       { { .i = 0 },     },
+@@ -182,6 +183,7 @@ static Key keys[] = {
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_g,      toggle,     { .i = Geolocation } },
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_s,      toggle,     { .i = JavaScript } },
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_i,      toggle,     { .i = LoadImages } },
++	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_l,      toggle,     { .i = Notifications } },
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_v,      toggle,     { .i = Plugins } },
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
+ 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,     { .i = StrictTLS } },
+diff --git a/surf.c b/surf.c
+index ac832ff..2f2632b 100644
+--- a/surf.c
++++ b/surf.c
+@@ -72,6 +72,7 @@ typedef enum {
+ 	KioskMode,
+ 	LoadImages,
+ 	MediaManualPlay,
++	Notifications,
+ 	Plugins,
+ 	PreferredLanguages,
+ 	RunInFullscreen,
+@@ -677,7 +678,8 @@ gettogglestats(Client *c)
+ 	togglestats[8] = curconfig[FrameFlattening].val.i ? 'F' : 'f';
+ 	togglestats[9] = curconfig[Certificate].val.i ?     'X' : 'x';
+ 	togglestats[10] = curconfig[StrictTLS].val.i ?      'T' : 't';
+-	togglestats[11] = '\0';
++	togglestats[11] = curconfig[Notifications].val.i ?  'L' : 'l';
++	togglestats[12] = '\0';
+ }
+ 
+ void
+@@ -825,6 +827,9 @@ setparameter(Client *c, int refresh, ParamName p, const Arg *a)
+ 	case MediaManualPlay:
+ 		webkit_settings_set_media_playback_requires_user_gesture(s, a->i);
+ 		break;
++	case Notifications:
++		refresh = 0;
++		return;
+ 	case Plugins:
+ 		webkit_settings_set_enable_plugins(s, a->i);
+ 		break;
+@@ -1028,6 +1033,7 @@ newwindow(Client *c, const Arg *a, int noembed)
+ 	cmd[i++] = curconfig[Geolocation].val.i ?     "-G" : "-g" ;
+ 	cmd[i++] = curconfig[LoadImages].val.i ?      "-I" : "-i" ;
+ 	cmd[i++] = curconfig[KioskMode].val.i ?       "-K" : "-k" ;
++	cmd[i++] = curconfig[Notifications].val.i ?   "-L" : "-l" ;
+ 	cmd[i++] = curconfig[Style].val.i ?           "-M" : "-m" ;
+ 	cmd[i++] = curconfig[Inspector].val.i ?       "-N" : "-n" ;
+ 	cmd[i++] = curconfig[Plugins].val.i ?         "-P" : "-p" ;
+@@ -1610,6 +1616,8 @@ permissionrequested(WebKitWebView *v, WebKitPermissionRequest *r, Client *c)
+ 		else if (webkit_user_media_permission_is_for_video_device(
+ 		         WEBKIT_USER_MEDIA_PERMISSION_REQUEST(r)))
+ 			param = AccessWebcam;
++	} else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST(r)) {
++		param = Notifications;
+ 	} else {
+ 		return FALSE;
+ 	}
+@@ -2074,6 +2082,14 @@ main(int argc, char *argv[])
+ 		defconfig[KioskMode].val.i = 1;
+ 		defconfig[KioskMode].prio = 2;
+ 		break;
++	case 'l':
++		defconfig[Notifications].val.i = 0;
++		defconfig[Notifications].prio = 2;
++		break;
++	case 'L':
++		defconfig[Notifications].val.i = 1;
++		defconfig[Notifications].prio = 2;
++		break;
+ 	case 'm':
+ 		defconfig[Style].val.i = 0;
+ 		defconfig[Style].prio = 2;
