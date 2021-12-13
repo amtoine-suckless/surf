@@ -8,6 +8,7 @@ static char *cachedir       = "~/.config/surf/cache/";
 static char *cookiefile     = "~/.config/surf/cookies.txt";
 static char *dldir          = "~/dl/";
 static char *dlstatus       = "~/.config/surf/dlstatus/";
+static char *historyfile    = "~/.config/surf/history.txt";
 
 /* Webkit default features */
 /* Highest priority value will be used.
@@ -77,6 +78,15 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+/* SETURI(seturi)*/
+#define SETURI(s) {\
+    .v = (const char *[]){ "/bin/sh", "-c", \
+        "prop=\"`~/.config/surf/scripts/dmenu.uri.sh`\" &&" \
+        "xprop -id $1 -f $2 8u -set $2 \"$prop\"", \
+        "surf-seturi", winid, s, NULL \
+    } \
+}
+
 #define DLSTATUS { \
         .v = (const char *[]){ "alacritty", "-e", "/bin/sh", "-c",\
             "while true; do cat $1/* 2>/dev/null || echo \"no hay descargas\";"\
@@ -112,6 +122,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
              winid, r, NULL \
         } \
 }
+
 
 /* styles */
 /*
@@ -193,7 +204,9 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
 
 	/* download-console */
-	{ MODKEY,                GDK_KEY_d,      spawndls,   { 0 } },
+	{ MODKEY,               GDK_KEY_d,       spawndls,   { 0 } },
+
+  { MODKEY,               GDK_KEY_Return,  spawn,      SETURI("_SURF_GO") },
 };
 
 /* button definitions */

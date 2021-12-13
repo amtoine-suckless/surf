@@ -19,7 +19,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 |   | [download]                     |                                             |
 |   | [externalpipe]                 | [surf-2.0-externalpipe.diff]                |
 |   | [externalpipe-signal]          |                                             |
-|   | [history]                      | [surf-2.1-history.diff]                     |
+| x | [history]                      | [surf-2.1-history.diff]                     |
 |   | [homepage]                     | [surf-2.0-homepage.diff]                    |
 |   | [instapaper]                   |                                             |
 |   | [keycodes]                     |                                             |
