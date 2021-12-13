@@ -131,7 +131,10 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
  */
 static SiteSpecific styles[] = {
 	/* regexp               file in $styledir */
-	{ ".*",                 "default.css" },
+	{ ".*archlinux.org.*",  "archlinux.css" },
+	{ ".*suckless.org.*",   "suckless.css" },
+	{ ".*wikipedia.org.*",  "wikipedia.css" },
+	/* { ".*",                 "default.css" }, */
 };
 
 /* certificates */
