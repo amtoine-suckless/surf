@@ -85,6 +85,16 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
             "surf-dlstatus", dlstatus, NULL } \
 }
 
+#define SELNAV { \
+	.v = (char *[]){ "/bin/sh", "-c", \
+		"prop=\"`xprop -id $0 _SURF_HIST" \
+		" | sed -e 's/^.[^\"]*\"//' -e 's/\"$//' -e 's/\\\\\\n/\\n/g'" \
+		" | dmenu -i -l 10`\"" \
+		" && xprop -id $0 -f _SURF_NAV 8s -set _SURF_NAV \"$prop\"", \
+		winid, NULL \
+	} \
+}
+
 /* PLUMB(URI) */
 /* This called when some URI which does not begin with "about:",
  * "http://" or "https://" should be opened.
@@ -194,6 +204,7 @@ static Key keys[] = {
 
 	/* download-console */
 	{ MODKEY,                GDK_KEY_d,      spawndls,   { 0 } },
+  { MODKEY|GDK_SHIFT_MASK, GDK_h,          selhist,    SELNAV },
 };
 
 /* button definitions */
