@@ -29,7 +29,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 |   | [navigation-history]           | [surf-0.6-navhist.diff]                     |
 |   | [notifications]                | [surf-notifications-20201223-7dcce9e1.diff] |
 |   | [omnibar]                      | [surf-0.7-omnibar.diff]                     |
-|   | [playexternal]                 | [surf-playexternal-20190724-b814567.diff]   |
+| x | [playexternal]                 | [surf-playexternal-20190724-b814567.diff]   |
 |   | [popup-on-gesture]             |                                             |
 |   | [proxyconfig]                  |                                             |
 |   | [quit-hotkey]                  | [surf-quit_hotkey-20210830-11dca18.diff]    |
