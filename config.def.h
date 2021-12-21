@@ -135,6 +135,16 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+static char *linkselect_curwin [] = { "/bin/sh", "-c",
+	"~/.config/surf/scripts/surf_linkselect.sh $0 'Link' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
+	winid, NULL
+};
+static char *linkselect_newwin [] = { "/bin/sh", "-c",
+	"~/.config/surf/scripts/surf_linkselect.sh $0 'Link (new window)' | xargs -r surf",
+	winid, NULL
+};
+static char *editscreen[] = { "/bin/sh", "-c", "~/.config/surf/scripts/edit_screen.sh", NULL };
+
 static char *searchengine = "https://duckduckgo.com/?q=";
 static const char * defaultsearchengine = "http://www.google.co.uk/search?q=%s";
 static SearchEngine searchengines[] = {
@@ -171,6 +181,7 @@ static SiteSpecific certs[] = {
  * If you use anything else but MODKEY and GDK_SHIFT_MASK, don't forget to
  * edit the CLEANMASK() macro.
  */
+
 static Key keys[] = {
 	/* modifier              keyval          function            arg */
 	{ 0,                     GDK_KEY_g,      spawn,              SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO) },
@@ -227,9 +238,13 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,             { .i = StrictTLS } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,             { .i = Style } },
 
-	{ 0,                      GDK_KEY_d,     spawndls,           { 0 } },
+	{ 0,                     GDK_KEY_d,      spawndls,           { 0 } },
 
-  { 0,                      GDK_KEY_z,     spawn,              SETURI("_SURF_GO") },
+  { 0,                     GDK_KEY_z,      spawn,              SETURI("_SURF_GO") },
+
+  { MODKEY,                GDK_KEY_d,      externalpipe,       { .v = linkselect_curwin } },
+  { GDK_SHIFT_MASK|MODKEY, GDK_KEY_d,      externalpipe,       { .v = linkselect_newwin } },
+  { MODKEY,                GDK_KEY_o,      externalpipe,       { .v = editscreen        } },
 };
 
 
