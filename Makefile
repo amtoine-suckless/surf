@@ -24,6 +24,15 @@ surf: $(OBJ)
 
 $(OBJ) $(WOBJ): config.h common.h config.mk
 
+${OBJ}: config.h config.mk filters_compiled
+
+filters_compiled: filters
+	sed -e '/^$$/d' -e 's|\\|\\\\|g' -e 's|$$|",|' -e 's|^|"|' < filters > $@
+
+filters:
+	@echo creating $@ from filters.def
+	@cp filters.def $@
+
 config.h:
 	cp config.def.h $@
 
@@ -37,7 +46,7 @@ $(WOBJ): $(WSRC)
 	$(CC) $(WEBEXTCFLAGS) $(CFLAGS) -c $(WSRC)
 
 clean:
-	rm -f surf $(OBJ)
+	rm -f surf $(OBJ) surf-${VERSION}.tar.gz filters_compiled
 	rm -f $(WLIB) $(WOBJ)
 
 distclean: clean

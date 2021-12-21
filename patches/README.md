@@ -40,7 +40,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 | x | [spacesearch]                  | [surf-spacesearch-20170408-b814567.diff]    |
 |   | [startgo]                      |                                             |
 |   | [unicode-in-dmenu]             | [surf-0.6-dmenu-unicode.diff]               |
-|   | [url-filtering]                | [surf-tip-url-filtering.diff]               |
+| x | [url-filtering]                | [surf-tip-url-filtering.diff]               |
 |   | [useragent]                    | [surf-websearch-20190510-d068a38.diff]      |
 |   | [web-search]                   |                                             |
 |   | [xdg]                          | [surf-xdg-2.0.diff]                         |
