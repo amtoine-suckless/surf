@@ -33,7 +33,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 |   | [popup-on-gesture]             |                                             |
 |   | [proxyconfig]                  |                                             |
 | x | [quit-hotkey]                  | [surf-quit_hotkey-20210830-11dca18.diff]    |
-|   | [scroll-faster]                | [surf-scrollmultiply-2.0.diff]              |
+| x | [scroll-faster]                | [surf-scrollmultiply-2.0.diff]              |
 | x | [searchengines]                | [surf-0.7-webkit2-searchengines.diff]       |
 |   | [short-title]                  | [surf-short-title-20210206-7dcce9e.diff]    |
 |   | [smoothscrolling-via-GTK3]     | [surf-0.7-smoothscrolling.diff]             |
