@@ -1,3 +1,6 @@
+/* #define HOMEPAGE "https://duckduckgo.com/" */
+#define HOMEPAGE "~/.config/surf/html/homepage.html"
+
 /* modifier 0 means no modifier */
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
@@ -125,6 +128,11 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+static const char * defaultsearchengine = "http://www.google.co.uk/search?q=%s";
+static SearchEngine searchengines[] = {
+    { "g",   "http://www.google.de/search?q=%s"   },
+    { "leo", "http://dict.leo.org/ende?search=%s" },
+};
 
 /* styles */
 /*
@@ -227,5 +235,3 @@ static Button buttons[] = {
 	{ OnMedia,      MODKEY,         1,      clickexternplayer, { 0 },       1 },
 };
 
-/* #define HOMEPAGE "https://duckduckgo.com/" */
-#define HOMEPAGE "~/.config/surf/html/homepage.html"
