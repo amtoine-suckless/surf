@@ -128,6 +128,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+static char *searchengine = "https://duckduckgo.com/?q=";
 static const char * defaultsearchengine = "http://www.google.co.uk/search?q=%s";
 static SearchEngine searchengines[] = {
     { "g",   "http://www.google.de/search?q=%s"   },
@@ -223,6 +224,7 @@ static Key keys[] = {
 
   { 0,                      GDK_KEY_z,     spawn,              SETURI("_SURF_GO") },
 };
+
 
 /* button definitions */
 /* target can be OnDoc, OnLink, OnImg, OnMedia, OnEdit, OnBar, OnSel, OnAny */

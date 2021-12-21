@@ -37,7 +37,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 | x | [searchengines]                | [surf-0.7-webkit2-searchengines.diff]       |
 |   | [short-title]                  | [surf-short-title-20210206-7dcce9e.diff]    |
 |   | [smoothscrolling-via-GTK3]     | [surf-0.7-smoothscrolling.diff]             |
-|   | [spacesearch]                  | [surf-spacesearch-20170408-b814567.diff]    |
+| x | [spacesearch]                  | [surf-spacesearch-20170408-b814567.diff]    |
 |   | [startgo]                      |                                             |
 |   | [unicode-in-dmenu]             | [surf-0.6-dmenu-unicode.diff]               |
 |   | [url-filtering]                | [surf-tip-url-filtering.diff]               |
