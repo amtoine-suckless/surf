@@ -25,7 +25,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 |   | [keycodes]                     |                                             |
 |   | [middle-click-plumb]           |                                             |
 |   | [modal]                        | [surf-modal-20190209-d068a38.diff]          |
-|   | [multijs]                      | [surf-multijs-20190325-d068a38.diff]        |
+| x | [multijs]                      | [surf-multijs-20190325-d068a38.diff]        |
 |   | [navigation-history]           | [surf-0.6-navhist.diff]                     |
 |   | [notifications]                | [surf-notifications-20201223-7dcce9e1.diff] |
 |   | [omnibar]                      | [surf-0.7-omnibar.diff]                     |
