@@ -14,6 +14,7 @@
 #include <regex.h>
 #include <signal.h>
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -130,11 +131,6 @@ typedef struct {
 } Button;
 
 typedef struct {
-	char *token;
-	char *uri;
-} SearchEngine;
-
-typedef struct {
 	const char *uri;
 	Parameter config[ParameterLast];
 	regex_t re;
@@ -145,6 +141,12 @@ typedef struct {
 	char *file;
 	regex_t re;
 } SiteSpecific;
+
+typedef struct {
+	char *token;
+	char *uri;
+	int nr;
+} SearchEngine;
 
 /* Surf */
 static void die(const char *errstr, ...);
@@ -176,8 +178,13 @@ static void setstyle(Client *c, const char *file);
 static void runscript(Client *c);
 static void evalscript(Client *c, const char *jsstr, ...);
 static void updatewinid(Client *c);
+static int url_has_domain(char *url, char **parsed_uri); 
 static void handleplumb(Client *c, const char *uri);
 static void newwindow(Client *c, const Arg *a, int noembed);
+static const gchar *parseuri(const gchar *uri, char **parsed_uri);
+/* static gchar *parseuri(const gchar *uri); */
+static char **parse_address(const char *url);
+static char **parse_url(char *str);
 static void spawn(Client *c, const Arg *a);
 static void msgext(Client *c, char type, const Arg *a);
 static void destroyclient(Client *c);
@@ -218,7 +225,6 @@ static void webprocessterminated(WebKitWebView *v,
                                  Client *c);
 static void closeview(WebKitWebView *v, Client *c);
 static void destroywin(GtkWidget* w, Client *c);
-static gchar *parseuri(const gchar *uri);
 
 /* Hotkeys */
 static void pasteuri(GtkClipboard *clipboard, const char *text, gpointer d);
@@ -575,47 +581,110 @@ newclient(Client *rc)
 	return c;
 }
 
-void
-loaduri(Client *c, const Arg *a)
-{
-	struct stat st;
-	char *url, *path, *apath;
-	const char *uri = a->v;
+/* void */
+/* loaduri(Client *c, const Arg *a) */
+/* { */
+/* 	struct stat st; */
+/* 	char *url, *path, *apath; */
+/* 	const char *uri = a->v; */
 
-	if (g_strcmp0(uri, "") == 0)
+/* 	if (g_strcmp0(uri, "") == 0) */
+/* 		return; */
+
+/* 	if (g_str_has_prefix(uri, "http://")  || */
+/* 	    g_str_has_prefix(uri, "https://") || */
+/* 	    g_str_has_prefix(uri, "file://")  || */
+/* 	    g_str_has_prefix(uri, "about:")) { */
+/* 		url = g_strdup(uri); */
+/* 	} else { */
+/* 		if (uri[0] == '~') */
+/* 			apath = untildepath(uri); */
+/* 		else */
+/* 			apath = (char *)uri; */
+/* 		if (!stat(apath, &st) && (path = realpath(apath, NULL))) { */
+/* 			url = g_strdup_printf("file://%s", path); */
+/* 			free(path); */
+/* 		} else { */
+/*   		url = parseuri(uri); */
+/* 		} */
+/* 		if (apath != uri) */
+/* 			free(apath); */
+/* 	} */
+
+/* 	setatom(c, AtomUri, url); */
+
+/* 	if (strcmp(url, geturi(c)) == 0) { */
+/* 		reload(c, a); */
+/* 	} else { */
+/* 		webkit_web_view_load_uri(c->view, url); */
+/* 		updatetitle(c); */
+/* 		updatehistory(url); */
+/* 	} */
+
+/* 	g_free(url); */
+/* } */
+
+static void
+loaduri(Client *c, const Arg *arg) {
+	const gchar *u;
+	char *rp, *pt;
+	const gchar *uri = arg->v;
+	char **parsed_uri;
+	char *home;
+	char *path;
+	int i;
+	FILE *f;
+	Arg a = { .b = FALSE };
+
+	if (*uri == '\0')
 		return;
 
-	if (g_str_has_prefix(uri, "http://")  ||
-	    g_str_has_prefix(uri, "https://") ||
-	    g_str_has_prefix(uri, "file://")  ||
-	    g_str_has_prefix(uri, "about:")) {
-		url = g_strdup(uri);
-	} else {
-		if (uri[0] == '~')
-			apath = untildepath(uri);
-		else
-			apath = (char *)uri;
-		if (!stat(apath, &st) && (path = realpath(apath, NULL))) {
-			url = g_strdup_printf("file://%s", path);
-			free(path);
-		} else {
-  		url = parseuri(uri);
+	pt=malloc(strlen(uri)+1);
+	pt=strdup((char *)uri);
+	parsed_uri = parse_url(pt);
+
+	/* In case it's a file path. */
+	if(strncmp(parsed_uri[0], "file://", 6) == 0 ||
+		( strlen(parsed_uri[0]) == 0 && strlen(parsed_uri[1]) == 0)) {
+		path=malloc(strlen(parsed_uri[1])+strlen(parsed_uri[2])+strlen(parsed_uri[3])+1);
+		path=strcpy(path, parsed_uri[1]);
+		path=strcat(path, parsed_uri[2]);
+		path=strcat(path, parsed_uri[3]);
+
+		if (path[0] == '~')
+		{
+		    home = getenv("HOME");
+		    home = realloc(home, strlen(path)+strlen(home));
+		    home = strcat(home, path+1);
+		    free(path);
+		    path = home;
 		}
-		if (apath != uri)
-			free(apath);
-	}
-
-	setatom(c, AtomUri, url);
-
-	if (strcmp(url, geturi(c)) == 0) {
-		reload(c, a);
+		rp = realpath(path, NULL);
+		u = g_strdup_printf("file://%s", rp);
+		free(path);
+		free(rp);
 	} else {
-		webkit_web_view_load_uri(c->view, url);
-		updatetitle(c);
-		updatehistory(url);
+		u = parseuri(pt,parsed_uri);
 	}
 
-	g_free(url);
+	free(pt);
+	for (i=0;i<4;i++)
+	    free(parsed_uri[i]);
+	free(parsed_uri);
+
+	/* prevents endless loop */
+	if(c->uri && strcmp(u, c->uri) == 0) {
+		reload(c, &a);
+	} else {
+		webkit_web_view_load_uri(c->view, u);
+		f = fopen(historyfile, "a+");
+		fprintf(f, "%s", u);
+		fclose(f);
+		c->progress = 0;
+		c->title = copystr(&c->title, u);
+		g_free((gpointer )u);
+		updatetitle(c);
+	}
 }
 
 const char *
@@ -1804,20 +1873,62 @@ destroywin(GtkWidget* w, Client *c)
 		gtk_main_quit();
 }
 
-gchar *
-parseuri(const gchar *uri) {
+/* gchar * */
+/* parseuri(const gchar *uri) { */
+/* 	guint i; */
+
+/* 	for (i = 0; i < LENGTH(searchengines); i++) { */
+/* 		if (searchengines[i].token == NULL || searchengines[i].uri == NULL || */
+/* 		    *(uri + strlen(searchengines[i].token)) != ' ') */
+/* 			continue; */
+/* 		if (g_str_has_prefix(uri, searchengines[i].token)) */
+/* 			return g_strdup_printf(searchengines[i].uri, */
+/* 					       uri + strlen(searchengines[i].token) + 1); */
+/* 	} */
+
+/* 	return g_strdup_printf("http://%s", uri); */
+/* } */
+
+static const gchar *
+parseuri(const gchar *uri, char **parsed_uri) {
 	guint i;
+	gchar *pt = g_strdup(uri);
+
+	while (*pt == ' ')
+	    pt+=1;
+
+	bool hdm = url_has_domain((char *) pt, parsed_uri);
+
+	if (hdm)
+	    return g_strrstr(pt, "://") ? g_strdup(pt) : g_strdup_printf("http://%s", pt);
 
 	for (i = 0; i < LENGTH(searchengines); i++) {
-		if (searchengines[i].token == NULL || searchengines[i].uri == NULL ||
-		    *(uri + strlen(searchengines[i].token)) != ' ')
+		if (searchengines[i].token == NULL
+			|| searchengines[i].uri == NULL)
 			continue;
-		if (g_str_has_prefix(uri, searchengines[i].token))
-			return g_strdup_printf(searchengines[i].uri,
-					       uri + strlen(searchengines[i].token) + 1);
-	}
 
-	return g_strdup_printf("http://%s", uri);
+		if ((*(pt + strlen(searchengines[i].token)) == ' ' && g_str_has_prefix(pt, searchengines[i].token)))
+		{
+		    switch (searchengines[i].nr)
+		    {
+			case 0:
+			return g_strdup_printf("%s", searchengines[i].uri);
+			break;
+			case 2:
+			return g_strdup_printf(searchengines[i].uri, pt + strlen(searchengines[i].token) + 1, pt + strlen(searchengines[i].token) + 1);
+			break;
+			default:
+			return g_strdup_printf(searchengines[i].uri, pt + strlen(searchengines[i].token) + 1);
+			break;
+		    }
+		}
+
+		if (strcmp(pt, searchengines[i].token) == 0 && strstr(searchengines[i].token, "%s") == NULL)
+		{
+		    return g_strdup_printf(searchengines[i].uri, "");
+		}
+	}
+	return g_strdup_printf(defaultsearchengine, pt);
 }
 
 void
@@ -1895,6 +2006,154 @@ zoom(Client *c, const Arg *a)
 		webkit_web_view_set_zoom_level(c->view, 1.0);
 
 	curconfig[ZoomLevel].val.f = webkit_web_view_get_zoom_level(c->view);
+}
+
+#define SCHEME_CHAR(ch) (isalnum (ch) || (ch) == '-' || (ch) == '+')
+
+/*
+ * This function takes an url and chop it into three part: sheme, domain, the
+ * rest, e.g. http://www.google.co.uk/search?q=hello will produce a triple
+ * ('http://', 'www.google.co.uk', '/search?q=hello')
+ */
+static char **
+parse_url(char *str) {
+    /* Return the position of ':' - last element of a scheme, or 0 if there
+     * is no scheme. */
+    char *sch="";
+    char *pt;
+    char **ret;
+    char **dret;
+    int k,i = 0;
+
+    pt=malloc(strlen(str)+1);
+    pt=strcpy(pt, str);
+
+    while (*pt == ' ')
+	pt+=1;
+    ret=malloc(4*sizeof(char *));
+
+    /* The first char must be a scheme char. */
+    if (!*pt || !SCHEME_CHAR (*pt))
+    {
+	ret[0]=malloc(1);
+	ret[0][0]='\0';
+	dret=parse_address(pt);
+	for (k=0;k<3;k++)
+	    ret[k+1]=dret[k];
+	return ret;
+    }
+    ++i;
+    /* Followed by 0 or more scheme chars. */
+    while (*(pt+i) && SCHEME_CHAR (*(pt+i)))
+    {
+	++i;
+    }
+    sch=malloc(i+4);
+    sch=strncpy(sch, pt, i); 
+    sch[i]='\0';
+    if (strlen(sch)) {
+	sch=strcat(sch, "://");
+    }
+
+    /* Terminated by "://". */
+    if (strncmp(sch, pt, strlen(sch)) == 0) {
+	    ret[0]=sch;
+	    /* dret=malloc(strlen(str)); */
+	    dret=parse_address(pt+i+3);
+	    for (k=0;k<3;k++)
+		ret[k+1]=dret[k];
+	    return ret;
+    }
+    ret[0]=malloc(1);
+    ret[0][0]='\0';
+    dret=parse_address(str);
+    for (k=0;k<3;k++)
+	ret[k+1]=dret[k];
+    return ret;
+}
+
+#define DOMAIN_CHAR(ch) (isalnum (ch) || (ch) == '-' || (ch) == '.')
+
+/*
+ * This function takes an url without a scheme and outputs a pair: domain and
+ * the rest.
+ */
+static char **
+parse_address(const char *url)
+{
+    int n;
+    size_t i=0;
+    size_t u=strlen(url);
+    char *domain;
+    char *port;
+    char **res=malloc(3*sizeof (char *));
+
+    if (isalnum(*url)) {
+	++i;
+	while (*(url+i) && DOMAIN_CHAR (*(url+i)))
+	    ++i;
+    }
+    domain=malloc(i+1);
+    domain=strncpy(domain, url, i);
+    domain[i]='\0';
+
+    // check for a port number
+    if ( (u > i) && *(url+i) == ':' )
+    {
+	n=i+1;
+	while ( (n<=u) && (n<i+1+5) && isdigit(*(url+n)) )
+	    n++;
+	if (n>i+1)
+	{
+	    port=malloc(n-i+1);
+	    port=strncpy(port, (url+i), n-i);
+	    port[n-i+1]='\0';
+	}
+	else
+	{
+	    port=malloc(1);
+	    port[0]='\0';
+	}
+    }
+    else
+    {
+	n=i;
+	port=malloc(1);
+	port[0] = '\0';
+    }
+
+
+    res[0]=domain;
+    res[1]=port;
+    res[2]=malloc(strlen(url+n)+1);
+    res[2]=strcpy(res[2], (url+n));
+    return res;
+}
+
+/*
+ * This function tests if the url has a qualified domain name.
+ */
+static int
+url_has_domain(char *url, char **parsed_uri) {
+    char *domain=parsed_uri[1];
+    char *rest=parsed_uri[3];
+
+    if (strstr(domain, " ") != NULL)
+	return false;
+
+    if (! *domain ||
+	    (*rest && rest[0] != '/'))
+	return false;
+
+    // the domain name should contain at least one '.',
+    // unless it is "localhost"
+    if (strcmp(domain, "localhost") == 0) 
+	return true;
+
+    if (strstr(domain, ".") != NULL)
+	return true;
+
+    return false;
 }
 
 static void
