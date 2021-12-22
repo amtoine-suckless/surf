@@ -12,12 +12,12 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 |   | [autoopen]                     |                                             |
 | x | [bookmarking]                  | [surf-bookmarks-20170722-723ff26.diff]      |
 | x | [cachedir]                     | [surf-cachedir-20200831-2188894.diff]       |
-|   | [chromebar]                    | [surf-0.1-chromebar.diff]                   |
-|   | [chromekeys]                   | [surf-0.6-chromekeys.diff]                  |
+| ~ | [chromebar]                    | [surf-0.1-chromebar.diff]                   |
+| ~ | [chromekeys]                   | [surf-0.6-chromekeys.diff]                  |
 |   | [clipboard-instead-of-primary] |                                             |
 | x | [dlconsole]                    | [surf-dlconsole-20190919-d068a38.diff]      |
 |   | [download]                     |                                             |
-|   | [externalpipe]                 | [surf-2.0-externalpipe.diff]                |
+| x | [externalpipe]                 | [surf-2.0-externalpipe.diff]                |
 |   | [externalpipe-signal]          |                                             |
 | x | [history]                      | [surf-2.1-history.diff]                     |
 | x | [homepage]                     | [surf-2.0-homepage.diff]                    |
