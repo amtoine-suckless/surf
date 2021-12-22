@@ -130,7 +130,9 @@ static char *editscreen[] = { "/bin/sh", "-c", "~/.config/surf/scripts/edit_scre
 /* VIDEOPLAY(URI) */
 #define VIDEOPLAY(u) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
-             "mpv --ytdl-format='bestvideo[ext=mp4][height<=?360]+bestaudio[ext=m4a]' --really-quiet \"$0\"", u, NULL \
+             "prop=\"$(echo \'144\n240\n360\n480\n720\n1080\'" \
+             "| dmenu -l 10 -p \"video quality\")\" &&" \
+             "mpv --shuffle --ytdl-format='bestvideo[ext=mp4][height<=?\'$prop\']+bestaudio[ext=m4a]' --really-quiet \"$0\"", u, NULL \
         } \
 }
 
