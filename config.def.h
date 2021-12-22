@@ -40,11 +40,11 @@ static Parameter defconfig[ParameterLast] = {
   [DNSPrefetch]         = { { .i = 0 },     },
   [Ephemeral]           = { { .i = 0 },     },
   [FileURLsCrossAccess] = { { .i = 0 },     },
-  [FontSize]            = { { .i = 12 },    },
+  [FontSize]            = { { .i = 16 },    },
   [FrameFlattening]     = { { .i = 0 },     },
   [Geolocation]         = { { .i = 0 },     },
   [HideBackground]      = { { .i = 0 },     },
-  [Inspector]           = { { .i = 0 },     },
+  [Inspector]           = { { .i = 1 },     },
   [Java]                = { { .i = 1 },     },
   [JavaScript]          = { { .i = 1 },     },
   [KioskMode]           = { { .i = 0 },     },
@@ -141,6 +141,7 @@ static SiteSpecific styles[] = {
   { ".*archlinux.org.*",  "archlinux.css" },
   { ".*suckless.org.*",   "suckless.css" },
   { ".*wikipedia.org.*",  "wikipedia.css" },
+  { ".*youtube.*",        "youtube.css" },
   /* { ".*",                 "default.css" }, */
 };
 
