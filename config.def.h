@@ -119,17 +119,12 @@ u, NULL }}
 
 /* VIDEOPLAY(URI) */
 #define VIDEOPLAY(u) { .v = (const char *[]){ "/bin/sh", "-c", \
-  "prop=\"$(echo \'144\n240\n360\n480\n720\n1080\'" \
-  "| dmenu -l 10 -p \"video quality\")\" &&" \
-  "mpv --shuffle --ytdl-format='bestvideo[ext=mp4][height<=?\'$prop\']+bestaudio[ext=m4a]' --really-quiet \"$0\"", \
+  "~/.config/surf/scripts/dmenu.mpv.sh \"$0\"", \
 u, NULL }}
 
 /* BM_ADD(readprop) */
 #define BM_ADD(r) { .v = (const char *[]){ "/bin/sh", "-c", \
-  "(echo $(xprop -id $0 $1) | cut -d '\"' -f2 " \
-  "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && cat ~/.config/surf/bookmarks) " \
-  "| awk '!seen[$0]++' > ~/.config/surf/bookmarks.tmp && " \
-  "mv ~/.config/surf/bookmarks.tmp ~/.config/surf/bookmarks", \
+  "~/.config/surf/scripts/bm.add.sh \"$0\" \"$1\"", \
 winid, r, NULL }}
 
 static char *searchengine = "https://duckduckgo.com/?q=";
