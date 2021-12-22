@@ -90,6 +90,16 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+static char *linkselect_curwin [] = { "/bin/sh", "-c",
+	"~/.config/surf/scripts/surf_linkselect.sh $0 'Link' | xargs -r xprop -id $0 -f _SURF_GO 8u -set _SURF_GO",
+	winid, NULL
+};
+static char *linkselect_newwin [] = { "/bin/sh", "-c",
+	"~/.config/surf/scripts/surf_linkselect.sh $0 'Link (new window)' | xargs -r surf",
+	winid, NULL
+};
+static char *editscreen[] = { "/bin/sh", "-c", "~/.config/surf/scripts/edit_screen.sh", NULL };
+
 /* SETURI(seturi)*/
 #define SETURI(s) {\
     .v = (const char *[]){ "/bin/sh", "-c", \
@@ -134,16 +144,6 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
              winid, r, NULL \
         } \
 }
-
-static char *linkselect_curwin [] = { "/bin/sh", "-c",
-	"~/.config/surf/scripts/surf_linkselect.sh $0 'Link' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
-	winid, NULL
-};
-static char *linkselect_newwin [] = { "/bin/sh", "-c",
-	"~/.config/surf/scripts/surf_linkselect.sh $0 'Link (new window)' | xargs -r surf",
-	winid, NULL
-};
-static char *editscreen[] = { "/bin/sh", "-c", "~/.config/surf/scripts/edit_screen.sh", NULL };
 
 static char *searchengine = "https://duckduckgo.com/?q=";
 static const char * defaultsearchengine = "http://www.google.co.uk/search?q=%s";
