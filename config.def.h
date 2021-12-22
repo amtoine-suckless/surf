@@ -110,7 +110,7 @@ static char *editscreen[] = { "/bin/sh", "-c", "~/.config/surf/scripts/edit_scre
 }
 
 #define DLSTATUS { \
-        .v = (const char *[]){ "alacritty", "-e", "/bin/sh", "-c",\
+        .v = (const char *[]){ "kitty", "/bin/sh", "-c",\
             "while true; do cat $1/* 2>/dev/null || echo \"no hay descargas\";"\
             "A=; read A; "\
             "if [ $A = \"clean\" ]; then rm $1/*; fi; clear; done",\
