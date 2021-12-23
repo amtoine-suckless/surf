@@ -4,6 +4,7 @@
 
 The below urls are marked with a tick when properly installed.  
 The patches marked with `~` are installed in the sense that the code should be present, but do not work indeed.  
+The patches marked with `/` have been installed some day but then removed from the source code for reasons explained in the commit.  
 Patches have been patched with `patch -p1 < ./path/to/patch`.
 
 |   | patch url                      | patch diff                                  |
@@ -24,7 +25,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 |   | [instapaper]                   |                                             |
 |   | [keycodes]                     |                                             |
 |   | [middle-click-plumb]           |                                             |
-| x | [modal]                        | [surf-modal-20190209-d068a38.diff]          |
+| / | [modal]                        | [surf-modal-20190209-d068a38.diff]          |
 | x | [multijs]                      | [surf-multijs-20190325-d068a38.diff]        |
 |   | [navigation-history]           | [surf-0.6-navhist.diff]                     |
 |   | [notifications]                | [surf-notifications-20201223-7dcce9e1.diff] |

@@ -183,7 +183,6 @@ static void spawn(Client *c, const Arg *a);
 static void msgext(Client *c, char type, const Arg *a);
 static void destroyclient(Client *c);
 static void cleanup(void);
-static int insertmode = 0;
 
 /* GTK/WebKit */
 static WebKitWebView *newview(Client *c, WebKitWebView *rv);
@@ -243,7 +242,6 @@ static bool filter_init(void);
 static bool filter_request(const gchar *uri);
 static void find(Client *c, const Arg *a);
 static void externalpipe(Client *c, const Arg *a);
-static void insert(Client *c, const Arg *a);
 static void playexternal(Client *c, const Arg *a);
 
 /* Buttons */
@@ -1481,11 +1479,7 @@ winevent(GtkWidget *w, GdkEvent *e, Client *c)
 		updatetitle(c);
 		break;
 	case GDK_KEY_PRESS:
-		if (!curconfig[KioskMode].val.i &&
-		    !insertmode ||
-		    CLEANMASK(e->key.state) == (MODKEY|GDK_SHIFT_MASK) ||
-		    CLEANMASK(e->key.state) == (MODKEY) ||
-		    gdk_keyval_to_lower(e->key.keyval) == (GDK_KEY_Escape)) {
+		if (!curconfig[KioskMode].val.i) {
 			for (i = 0; i < LENGTH(keys); ++i) {
 				if (gdk_keyval_to_lower(e->key.keyval) ==
 				    keys[i].keyval &&
@@ -2150,12 +2144,6 @@ find(Client *c, const Arg *a)
 	if (!filter_init()) {
 		die("Failed to compile one or more filter expressions\n");
 	}
-}
-
-void
-insert(Client *c, const Arg *a)
-{
-		insertmode = (a->i);
 }
 
 void
