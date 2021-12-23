@@ -139,9 +139,41 @@ winid, r, NULL }}
 static char *searchengine = "https://www.google.com/search?q=";
 static const char * defaultsearchengine = "https://www.google.co.uk/search?q=%s";
 static SearchEngine searchengines[] = {
-    { "g", "https://www.google.com/search?q=%s"   },
-    { "l", "https://dict.leo.org/ende?search=%s" },
-    { "d", "https://duckduckgo.com/?q=%s" },
+/* Search Engines */
+  { "bi=", "https://www.bing.com/search?q=%s" },
+  { "br=", "https://search.brave.com/search?q=%s" },
+  { "du=", "https://duckduckgo.com/?q=%s" },
+  { "go=", "https://www.google.com/search?q=%s" },
+  { "le=", "https://dict.leo.org/ende?search=%s" },
+  { "qw=", "https://www.qwant.com/?q=%s" },
+  { "sw=", "https://swisscows.com/web?query=%s" },
+  { "ya=", "https://yandex.com/search/?text=%s" },
+/* Information/News */
+  { "bb=", "https://www.bbc.co.uk/search?q=%s" },
+  { "cn=", "https://www.cnn.com/search?q=%s" },
+  { "gn=", "https://news.google.com/search?q=%s" },
+  { "wp=", "https://en.wikipedia.org/w/index.php?search=%s" },
+  { "wt=", "https://en.wiktionary.org/w/index.php?search=%s" },
+/* Social Media */
+  { "re=", "https://www.reddit.com/search/?q=%s" },
+  { "od=", "https://odysee.com/$/search?q=%s" },
+  { "yo=", "https://www.youtube.com/results?search_query=%s" },
+/* Online Shopping */
+  { "am=", "https://www.amazon.com/s?k=%s" },
+  { "cr=", "https://www.craigslist.org/search/sss?query=%s" },
+  { "eb=", "https://www.ebay.com/sch/i.html?&_nkw=%s" },
+  { "gu=", "https://www.gumtree.com/search?search_category=all&q=%s" },
+/* Linux */
+  { "aa=", "https://aur.archlinux.org/packages/?O=0&K=%s" },
+  { "ap=", "https://archlinux.org/packages/?sort=&q=%s" },
+  { "aw=", "https://wiki.archlinux.org/index.php?search=%s" },
+  { "dp=", "https://packages.debian.org/search?suite=default&section=all&arch=any&searchon=names&keywords=%s" },
+/* Development */
+  { "gh=", "https://github.com/search?q=%s" },
+  { "gl=", "https://gitlab.com/search?search=%s" },
+  { "os=", "https://opensource.google/projects/search?q=%s" },
+  { "sf=", "https://sourceforge.net/directory/?q=%s" },
+  { "so=", "https://stackoverflow.com/search?q=%s" },
 };
 
 
