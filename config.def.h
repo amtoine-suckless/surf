@@ -1,5 +1,6 @@
 /* #define HOMEPAGE "https://duckduckgo.com/" */
 #define HOMEPAGE "~/.config/surf/html/homepage.html"
+
 /* modifier 0 means no modifier */
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
@@ -94,7 +95,13 @@ static char *linkselect_newwin [] = { "/bin/sh", "-c",
   "~/.config/surf/scripts/dmenu.linkselect.sh $0 'Link (new window)' | xargs -r surf",
 winid, NULL };
 static char *editscreen[] = { "/bin/sh", "-c",
-  "~/.config/surf/scripts/edit_screen.sh",
+  "~/.config/surf/scripts/edit.screen.sh",
+NULL };
+static char *editbookmarks[] = { "/bin/sh", "-c",
+  "~/.config/surf/scripts/edit.bookmarks.sh",
+NULL };
+static char *openhelp[] = { "/bin/sh", "-c",
+  "~/.config/surf/scripts/open.help.sh",
 NULL };
 
 /* SETURI(seturi)*/
@@ -124,16 +131,17 @@ u, NULL }}
 
 /* BM_ADD(readprop) */
 #define BM_ADD(r) { .v = (const char *[]){ "/bin/sh", "-c", \
-  "~/.config/surf/scripts/bm.add.sh \"$0\" \"$1\"", \
+  "~/.config/surf/scripts/add.bm.sh \"$0\" \"$1\"", \
 winid, r, NULL }}
 
 
 /* search engines */
-static char *searchengine = "https://duckduckgo.com/?q=";
-static const char * defaultsearchengine = "http://www.google.co.uk/search?q=%s";
+static char *searchengine = "https://www.google.com/search?q=";
+static const char * defaultsearchengine = "https://www.google.co.uk/search?q=%s";
 static SearchEngine searchengines[] = {
-    { "g",   "http://www.google.de/search?q=%s"   },
-    { "leo", "http://dict.leo.org/ende?search=%s" },
+    { "g", "https://www.google.com/search?q=%s"   },
+    { "l", "https://dict.leo.org/ende?search=%s" },
+    { "d", "https://duckduckgo.com/?q=%s" },
 };
 
 
@@ -205,12 +213,14 @@ static Key keys[] = {
   { MODKEY,                GDK_KEY_t,      showcert,           { 0 } },
 
 
+  { 0,                     GDK_KEY_F1,     externalpipe,       { .v = openhelp } },
+  { 0,                     GDK_KEY_F2,     externalpipe,       { .v = editbookmarks } },
   { 0,                     GDK_KEY_F4,     playexternal,       { 0 } },
   { 0,                     GDK_KEY_F5,     spawndls,           { 0 } },
   { 0,                     GDK_KEY_F6,     spawn,              SETURI("_SURF_GO") },
   { 0,                     GDK_KEY_F7,     externalpipe,       { .v = linkselect_curwin } },
   { 0,                     GDK_KEY_F8,     externalpipe,       { .v = linkselect_newwin } },
-  { 0,                     GDK_KEY_F9,     externalpipe,       { .v = editscreen        } },
+  { 0,                     GDK_KEY_F9,     externalpipe,       { .v = editscreen } },
   { 0,                     GDK_KEY_F10,    togglecookiepolicy, { 0 } },
   { 0,                     GDK_KEY_F11,    togglefullscreen,   { 0 } },
   { 0,                     GDK_KEY_F12,    toggleinspector,    { 0 } },
