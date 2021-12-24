@@ -241,7 +241,7 @@ static Key keys[] = {
   { MODKEY,                GDK_KEY_p,      clipboard,          { .i = 1 } },
   { MODKEY,                GDK_KEY_y,      clipboard,          { .i = 0 } },
 
-  { MODKEY,                GDK_KEY_p,      print,              { 0 } },
+  { MODKEY|GDK_SHIFT_MASK, GDK_KEY_p,      print,              { 0 } },
   { MODKEY,                GDK_KEY_t,      showcert,           { 0 } },
 
 
