@@ -15,7 +15,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 | x | [cachedir]                     | [surf-cachedir-20200831-2188894.diff]       |
 | ~ | [chromebar]                    | [surf-0.1-chromebar.diff]                   |
 | ~ | [chromekeys]                   | [surf-0.6-chromekeys.diff]                  |
-|   | [clipboard-instead-of-primary] |                                             |
+| x | [clipboard-instead-of-primary] | [surf-clipboard-20200112-a6a8878.diff]      |
 | x | [dlconsole]                    | [surf-dlconsole-20190919-d068a38.diff]      |
 |   | [download]                     |                                             |
 | x | [externalpipe]                 | [surf-2.0-externalpipe.diff]                |
@@ -91,6 +91,7 @@ Patches have been patched with `patch -p1 < ./path/to/patch`.
 [surf-cachedir-20200831-2188894.diff]:       surf-cachedir-20200831-2188894.diff
 [surf-0.1-chromebar.diff]:                   surf-0.1-chromebar.diff
 [surf-0.6-chromekeys.diff]:                  surf-0.6-chromekeys.diff
+[surf-clipboard-20200112-a6a8878.diff]:      surf-clipboard-20200112-a6a8878.diff
 [surf-dlconsole-20190919-d068a38.diff]:      surf-dlconsole-20190919-d068a38.diff
 [surf-2.0-externalpipe.diff]:                surf-2.0-externalpipe.diff
 [surf-2.1-history.diff]:                     surf-2.1-history.diff
