@@ -204,7 +204,7 @@ static SiteSpecific certs[] = {
 
 
 /* hotkeys */
-#define MODKEY GDK_MOD1_MASK
+#define MODKEY GDK_CONTROL_MASK
 /*
  * If you use anything else but MODKEY and GDK_SHIFT_MASK, don't forget to
  * edit the CLEANMASK() macro.
