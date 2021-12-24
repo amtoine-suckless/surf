@@ -219,7 +219,7 @@ static Key keys[] = {
   { MODKEY,                GDK_KEY_n,      find,               { .i = +1 } },
   { MODKEY|GDK_SHIFT_MASK, GDK_KEY_n,      find,               { .i = -1 } },
 
-  { MODKEY,                GDK_KEY_c,      stop,               { 0 } },
+  { MODKEY,                GDK_KEY_s,      stop,               { 0 } },
   { MODKEY,                GDK_KEY_q,      quit,               { 0 } },
 
   { MODKEY|GDK_SHIFT_MASK, GDK_KEY_r,      reload,             { .i = 1 } },
@@ -235,9 +235,9 @@ static Key keys[] = {
   { MODKEY,                GDK_KEY_i,      scrollh,            { .i = +10 } },
   { MODKEY,                GDK_KEY_u,      scrollh,            { .i = -10 } },
 
-  { MODKEY|GDK_SHIFT_MASK, GDK_KEY_j,      zoom,               { .i = -1 } },
-  { MODKEY|GDK_SHIFT_MASK, GDK_KEY_k,      zoom,               { .i = +1 } },
-  { MODKEY|GDK_SHIFT_MASK, GDK_KEY_q,      zoom,               { .i = 0  } },
+  { MODKEY,                GDK_KEY_Down,   zoom,               { .i = -1 } },
+  { MODKEY,                GDK_KEY_Up,     zoom,               { .i = +1 } },
+  { MODKEY,                GDK_KEY_space,  zoom,               { .i = 0  } },
 
   { MODKEY,                GDK_KEY_p,      clipboard,          { .i = 1 } },
   { MODKEY,                GDK_KEY_y,      clipboard,          { .i = 0 } },
