@@ -188,7 +188,8 @@ static SiteSpecific styles[] = {
   { ".*archlinux.org.*",  "archlinux.css" },
   { ".*suckless.org.*",   "suckless.css" },
   { ".*wikipedia.org.*",  "wikipedia.css" },
-  { ".*youtube.*",        "youtube.css" },
+  { ".*youtube.com*",     "youtube.css" },
+  { ".*github.com*",      "github.css" },
   /* { ".*",                 "default.css" }, */
 };
 
