@@ -190,7 +190,7 @@ static SiteSpecific styles[] = {
   { ".*wikipedia.org.*",  "wikipedia.css" },
   { ".*youtube.com*",     "youtube.css" },
   { ".*github.com*",      "github.css" },
-  /* { ".*",                 "default.css" }, */
+  { ".*",                 "default.css" },
 };
 
 
