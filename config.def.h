@@ -184,13 +184,14 @@ static SearchEngine searchengines[] = {
  * the list.
  */
 static SiteSpecific styles[] = {
-  /* regexp               file in $styledir */
-  { ".*archlinux.org.*",  "archlinux.css" },
-  { ".*suckless.org.*",   "suckless.css" },
-  { ".*wikipedia.org.*",  "wikipedia.css" },
-  { ".*youtube.com*",     "youtube.css" },
-  { ".*github.com*",      "github.css" },
-  { ".*",                 "default.css" },
+  /* regexp                   file in $styledir */
+  { ".*archlinux.org.*",     "archlinux.css" },
+  { ".*suckless.org.*",      "suckless.css" },
+  { ".*wikipedia.org.*",     "wikipedia.css" },
+  { ".*youtube.com.*",       "youtube.css" },
+  { ".*github.com.*",        "github.css" },
+  { ".*sw.kovidgoyal.net.*", "kitty.css" },
+  { ".*",                    "default.css" },
 };
 
 
