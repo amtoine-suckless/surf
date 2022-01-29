@@ -4,7 +4,7 @@
 /* modifier 0 means no modifier */
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
-static char *styledir       = "~/.config/surf/styles/";
+static char *styledir       = "~/.config/surf/css/";
 static char *certdir        = "~/.config/surf/certificates/";
 static char *cachedir       = "~/.config/surf/cache/";
 static char *cookiefile     = "~/.config/surf/cookies.txt";
@@ -158,7 +158,7 @@ static SearchEngine searchengines[] = {
 /* Social Media */
   { "re=", "https://www.reddit.com/search/?q=%s" },
   { "od=", "https://odysee.com/$/search?q=%s" },
-  { "yo=", "https://www.youtube.com/results?search_query=%s" },
+  { "yt=", "https://www.youtube.com/results?search_query=%s" },
 /* Online Shopping */
   { "am=", "https://www.amazon.com/s?k=%s" },
   { "cr=", "https://www.craigslist.org/search/sss?query=%s" },
@@ -185,13 +185,16 @@ static SearchEngine searchengines[] = {
  */
 static SiteSpecific styles[] = {
   /* regexp                   file in $styledir */
-  { ".*archlinux.org.*",     "archlinux.css" },
-  { ".*suckless.org.*",      "suckless.css" },
-  { ".*wikipedia.org.*",     "wikipedia.css" },
-  { ".*youtube.com.*",       "youtube.css" },
-  { ".*github.com.*",        "github.css" },
-  { ".*sw.kovidgoyal.net.*", "kitty.css" },
-  { ".*",                    "default.css" },
+  { ".*archlinux.org.*",                "archlinux.css" },
+  { ".*suckless.org.*",                 "suckless.css" },
+  { ".*wikipedia.org.*",                "wikipedia.css" },
+  { ".*youtube.com.*",                  "youtube.css" },
+  { ".*github.com.*",                   "github.css" },
+  { ".*sw.kovidgoyal.net.*",            "kitty.css" },
+  { ".*tecmint.com.*",                  "tecmint.css" },
+  { ".*supaerodatascience.github.io.*", "sdd.css" },
+  { ".*stackoverflow.com.*",            "stackoverflow.css" },
+  { ".*",                               "default.css" },
 };
 
 
