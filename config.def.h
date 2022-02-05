@@ -194,6 +194,7 @@ static SiteSpecific styles[] = {
   { ".*tecmint.com.*",                  "tecmint.css" },
   { ".*supaerodatascience.github.io.*", "sdd.css" },
   { ".*stackoverflow.com.*",            "stackoverflow.css" },
+  { ".*qtile.org.*",                    "qtile.css" },
   { ".*",                               "default.css" },
 };
 
