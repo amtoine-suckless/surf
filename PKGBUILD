@@ -1,6 +1,6 @@
 # Maintainer: Antoine Stevan
 pkgname=surf-a2ns-git
-pkgver=5.0.r627.65922a1
+pkgver=5.0.r628.7e63f07
 pkgrel=1
 epoch=
 pkgdesc="A heavily patched build of surf."
@@ -8,7 +8,7 @@ arch=(x86_64)
 url="https://github.com/a2n-s/surf.git"
 license=('GNU')
 groups=()
-depends=(grc webkit2gtk xorg-xprop)
+depends=(gcr webkit2gtk xorg-xprop)
 makedepends=(git)
 checkdepends=()
 optdepends=()
@@ -31,7 +31,7 @@ pkgver() {
 
 build() {
   cd surf
-  make X11INC=/usr/include/X11 X11LIB=/usr/lib/X11
+  make
 }
 
 package() {
